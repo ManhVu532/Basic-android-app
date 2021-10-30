@@ -4,6 +4,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -26,6 +27,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     DrawerLayout mDrawerLayout;
     private int fragment = 0;
     SharedPreferences sharedPref;
+    TextView txt_username;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,6 +41,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         String user = getUser();
 
         mDrawerLayout = findViewById(R.id.drawer_layout);
+        NavigationView nv = mDrawerLayout.findViewById(R.id.nav_view);
+        txt_username =  nv.inflateHeaderView(R.layout.drawer_header).findViewById(R.id.txt_user);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, mDrawerLayout, toolbar,
                 R.string.navigation_open, R.string.navigation_close);
         mDrawerLayout.addDrawerListener(toggle);
@@ -46,9 +50,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        if(user.isEmpty())
+        if(user.isEmpty()) {
             replaceFragment(new LoginFragment());
-        else replaceFragment(new HomeFragment());
+            toolbar.setTitle("Đăng nhập");
+        }
+        else{
+            replaceFragment(new HomeFragment());
+            txt_username.setText(user);
+            toolbar.setTitle("Trang chủ");
+        }
     }
 
     @Override
@@ -67,6 +77,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 if(fragment == 0) {
                     replaceFragment(new LoginFragment());
                     toolbar.setTitle("Đăng nhập");
+                    txt_username.setText("Xin chào");
                 }
                 return true;
             default:
@@ -88,6 +99,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return toolbar;
     }
 
+    public TextView getTxt_username() {
+        return txt_username;
+    }
+
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
@@ -100,6 +115,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 else {
                     replaceFragment(new HomeFragment());
                     toolbar.setTitle("Trang chủ");
+                    txt_username.setText(getUser());
                 }
                 fragment = 0;
             }

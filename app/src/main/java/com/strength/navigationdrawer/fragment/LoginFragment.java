@@ -49,6 +49,7 @@ public class LoginFragment extends Fragment {
                     MainActivity parent = (MainActivity)getActivity();
                     parent.saveUser(username);
                     parent.getToolbar().setTitle("Trang chủ");
+                    parent.getTxt_username().setText(username);
                     parent.replaceFragment(new HomeFragment());
                 }else{
                     Snackbar.make(view, "Đăng nhập thất bại vui lòng kiểm tra lại!", Snackbar.LENGTH_LONG)
